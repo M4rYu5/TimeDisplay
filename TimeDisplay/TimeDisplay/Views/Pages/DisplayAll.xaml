@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:viewmodels="clr-namespace:TimeDisplay.ViewModels"
+             xmlns:pages="clr-namespace:TimeDisplay.Views.Pages" 
+             xmlns:views="clr-namespace:TimeDisplay.Views.Views"
+             xmlns:vm="clr-namespace:TimeDisplay.ViewModels" xmlns:models="clr-namespace:TimeDisplay.Models"
+             x:Class="TimeDisplay.Views.Pages.DisplayAll"
+             Title="{Binding Title}">
+    <ContentPage.Resources>
+        <viewmodels:DisplayAllViewModel x:Name="DisplayAllVM" x:Key="clockView"/>
+        <views:DateTimeToTimeComponentConverter x:Key="timeConverter"/>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <ListView x:Name="NN" BindingContext="{StaticResource clockView}"
+            ItemsSource="{Binding Clocks}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <views:DigitalClock StyleClass="DigitalClock"/>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentPage.Content>
+</ContentPage>

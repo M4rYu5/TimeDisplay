@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodels="clr-namespace:TimeDisplay.ViewModels" 
+             xmlns:pages="clr-namespace:TimeDisplay.Views.Views"
+             x:Class="TimeDisplay.Views.Views.DigitalClock"
+             >
+    <ContentView.Resources>
+        <pages:DateTimeToTimeComponentConverter x:Key="timeConverter"/>
+    </ContentView.Resources>
+    <ContentView.Content>
+            <StackLayout Orientation="Vertical">
+                <Label Text="{Binding Name}"/>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="{Binding DateTime, Converter={StaticResource timeConverter}, ConverterParameter=hour}"/>
+                    <Label Text=":"/>
+                    <Label Text="{Binding DateTime, Converter={StaticResource timeConverter}, ConverterParameter=min}"/>
+                    <Label Text=":"/>
+                    <Label Text="{Binding DateTime, Converter={StaticResource timeConverter}, ConverterParameter=sec}"/>
+                </StackLayout>
+            </StackLayout>
+    </ContentView.Content>
+</ContentView>
