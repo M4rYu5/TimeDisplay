@@ -13,8 +13,8 @@
                 <theming:DarkColorPaletteResourceDictionary/>
             </d:ResourceDictionary.MergedDictionaries>
             <!-- __________________________________________________________ -->
-            
 
+            <ResourceDictionary Source="Resources\Styles\Global.xaml"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
