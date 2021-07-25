@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <Style Class="DigitalClockBorder" TargetType="Frame">
+        <Setter Property="CornerRadius" Value="5"/>
+        <Setter Property="BorderColor" Value="{DynamicResource Background2}"/>
+        <Setter Property="Margin" Value="5"/>
+    </Style>
+    <Style Class="DigitalClockTimeTextStyle" TargetType="Label" ApplyToDerivedTypes="True">
+        <Setter Property="FontSize" Value="35"/>
+        <Setter Property="FontFamily" Value="Digital"/>
+        <Setter Property="TextColor" Value="{DynamicResource TextColor}"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+    </Style>
+    <Style Class="DigitalClockTimeTextContainerStyle" TargetType="View" ApplyToDerivedTypes="True">
+        <Setter Property="Margin" Value="0, 0, 0, 15"/>
+    </Style>
+    <Style Class="DigitalClockNameStyle" TargetType="Label" ApplyToDerivedTypes="True">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="TextColor" Value="{DynamicResource SecondaryTextColor}"/>
+        <Setter Property="Margin" Value="10, 5"/>
+        <Setter Property="LineBreakMode" Value="TailTruncation"/>
+    </Style>
+</ResourceDictionary>

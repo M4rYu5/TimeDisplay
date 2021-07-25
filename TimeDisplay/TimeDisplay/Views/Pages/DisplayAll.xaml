@@ -4,22 +4,30 @@
              xmlns:pages="clr-namespace:TimeDisplay.Views.Pages" 
              xmlns:views="clr-namespace:TimeDisplay.Views.Views"
              xmlns:vm="clr-namespace:TimeDisplay.ViewModels" xmlns:models="clr-namespace:TimeDisplay.Models"
+             x:DataType="viewmodels:DisplayAllViewModel"
              x:Class="TimeDisplay.Views.Pages.DisplayAll"
-             Title="{Binding Title}">
+             Title="{Binding Title}"
+             BackgroundColor="{DynamicResource Background}">
     <ContentPage.Resources>
         <viewmodels:DisplayAllViewModel x:Name="DisplayAllVM" x:Key="clockView"/>
         <views:DateTimeToTimeComponentConverter x:Key="timeConverter"/>
     </ContentPage.Resources>
     <ContentPage.Content>
-        <ListView x:Name="NN" BindingContext="{StaticResource clockView}"
-            ItemsSource="{Binding Clocks}">
-            <ListView.ItemTemplate>
+        <CollectionView x:Name="NN" 
+                        BindingContext="{StaticResource clockView}"
+                        ItemsSource="{Binding Clocks}"
+                        Margin="20">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Span="2" 
+                                 Orientation="Vertical"
+                                 VerticalItemSpacing="5"
+                                 HorizontalItemSpacing="5"/>
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <ViewCell>
-                        <views:DigitalClock StyleClass="DigitalClock"/>
-                    </ViewCell>
+                    <views:DigitalClock/>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </ContentPage.Content>
 </ContentPage>

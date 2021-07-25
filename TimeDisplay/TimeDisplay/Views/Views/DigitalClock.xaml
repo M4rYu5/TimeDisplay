@@ -2,22 +2,34 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:viewmodels="clr-namespace:TimeDisplay.ViewModels" 
-             xmlns:pages="clr-namespace:TimeDisplay.Views.Views"
+             xmlns:pages="clr-namespace:TimeDisplay.Views.Views" 
+             x:DataType="viewmodels:ClockViewModel"
              x:Class="TimeDisplay.Views.Views.DigitalClock"
-             >
+             StyleClass="TransparentBackground">
     <ContentView.Resources>
         <pages:DateTimeToTimeComponentConverter x:Key="timeConverter"/>
+        <ResourceDictionary Source="..\..\..\Resources\Styles\DigitalClockStyle.xaml"/>
     </ContentView.Resources>
     <ContentView.Content>
-            <StackLayout Orientation="Vertical">
-                <Label Text="{Binding Name}"/>
-                <StackLayout Orientation="Horizontal">
-                    <Label Text="{Binding DateTime, Converter={StaticResource timeConverter}, ConverterParameter=hour}"/>
-                    <Label Text=":"/>
-                    <Label Text="{Binding DateTime, Converter={StaticResource timeConverter}, ConverterParameter=min}"/>
-                    <Label Text=":"/>
-                    <Label Text="{Binding DateTime, Converter={StaticResource timeConverter}, ConverterParameter=sec}"/>
+        <Frame StyleClass="ZeroPadding, Background2, DigitalClockBorder, Shadow">
+            <StackLayout StyleClass="ZeroMargin, ZeroPadding, ZeroSpacing" 
+                         Orientation="Vertical">
+                <Label StyleClass="ZeroMargin, ZeroPadding, DigitalClockNameStyle" 
+                       Text="{Binding Name}"/>
+                <StackLayout Orientation="Horizontal"
+                             StyleClass="ZeroMargin, ZeroPadding, ZeroSpacing, CenterHorizontal, DigitalClockTimeTextContainerStyle">
+                    <Label StyleClass="ZeroMargin, ZeroPadding, DigitalClockTimeTextStyle" 
+                           Text="{Binding DateTime, Converter={StaticResource timeConverter}, ConverterParameter=hour}"/>
+                    <Label StyleClass="ZeroMargin, ZeroPadding, DigitalClockTimeTextStyle" 
+                           Text=":"/>
+                    <Label StyleClass="ZeroMargin, ZeroPadding, DigitalClockTimeTextStyle" 
+                           Text="{Binding DateTime, Converter={StaticResource timeConverter}, ConverterParameter=min}"/>
+                    <Label StyleClass="ZeroMargin, ZeroPadding, DigitalClockTimeTextStyle" 
+                           Text=":"/>
+                    <Label StyleClass="ZeroMargin, ZeroPadding, DigitalClockTimeTextStyle" 
+                           Text="{Binding DateTime, Converter={StaticResource timeConverter}, ConverterParameter=sec}"/>
                 </StackLayout>
             </StackLayout>
+        </Frame>
     </ContentView.Content>
 </ContentView>
