@@ -8,13 +8,6 @@ namespace TimeDisplay.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        string title = string.Empty;
-        public string Title
-        {
-            get { return title; }
-            set { SetProperty(ref title, value); }
-        }
-
         protected bool SetProperty<T>(ref T backingStore, T value,
             [CallerMemberName] string propertyName = "",
             Action onChanged = null)

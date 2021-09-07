@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:pages="clr-namespace:TimeDisplay.Views.Pages"
+       xmlns:behaviors="clr-namespace:TimeDisplay.Behaviors" xmlns:views="clr-namespace:TimeDisplay.Views.Views" xmlns:viewmodels="clr-namespace:TimeDisplay.ViewModels" xmlns:models="clr-namespace:TimeDisplay.Models"
+       x:Class="TimeDisplay.Views.Pages.AppShell"
+       Shell.BackgroundColor="{DynamicResource Background2}"
+       Shell.UnselectedColor="{DynamicResource SecondaryTextColor}"
+       Shell.TitleColor="{DynamicResource TextColor}"
+       Shell.TabBarBackgroundColor="{DynamicResource Background2}"
+       Shell.FlyoutBackgroundColor="{DynamicResource Background}"
+       Shell.ForegroundColor="{DynamicResource TextColor}"
+       >
+    <Shell.Resources>
+        <Style TargetType="Label" Class="FlyoutItemLabelStyle">
+            <Setter Property="Margin" Value="0" />
+        </Style>
+        <Style TargetType="Layout" Class="FlyoutItemLayoutStyle" ApplyToDerivedTypes="True">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <Setter.Value>
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" >
+                                <VisualState.Setters>
+                                    <Setter TargetName="FlyoutItemLabel" Property="Label.TextColor" Value="{DynamicResource SecondaryTextColor}" />
+                                    <Setter Property="BackgroundColor" Value="{DynamicResource Background}" />
+                                    <Setter TargetName="FlyoutItemImage" Property="behaviors:FontImageSourceChanger.Color" Value="{DynamicResource SecondaryTextColor}"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter TargetName="FlyoutItemLabel" Property="Label.TextColor" Value="{DynamicResource TextColor}" />
+                                    <Setter Property="BackgroundColor" Value="{DynamicResource Background3}" />
+                                    <Setter TargetName="FlyoutItemImage" Property="behaviors:FontImageSourceChanger.Color" Value="{DynamicResource TextColor}"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Shell.Resources>
+    <ShellContent Title="Times"  ContentTemplate="{DataTemplate pages:DisplayAll}">
+        <ShellContent.Icon>
+            <FontImageSource Glyph="⌚"/>
+        </ShellContent.Icon>
+    </ShellContent>
+
+</Shell>

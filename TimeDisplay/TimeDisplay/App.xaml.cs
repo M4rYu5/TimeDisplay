@@ -14,7 +14,7 @@ namespace TimeDisplay
         {
             InitializeComponent();
             ThemeManager.Init(this);
-            MainPage = new DisplayAll();
+            MainPage = new AppShell();
         }
 
 
