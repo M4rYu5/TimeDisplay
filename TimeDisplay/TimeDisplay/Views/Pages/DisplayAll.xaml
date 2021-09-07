@@ -6,10 +6,10 @@
              xmlns:vm="clr-namespace:TimeDisplay.ViewModels" xmlns:models="clr-namespace:TimeDisplay.Models"
              x:DataType="viewmodels:DisplayAllViewModel"
              x:Class="TimeDisplay.Views.Pages.DisplayAll"
-             Title="{Binding Title}"
+             Title="Times"
              BackgroundColor="{DynamicResource Background}">
     <ContentPage.Resources>
-        <viewmodels:DisplayAllViewModel x:Name="DisplayAllVM" x:Key="clockView" Title="Times"/>
+        <viewmodels:DisplayAllViewModel x:Name="DisplayAllVM" x:Key="clockView"/>
         <views:DateTimeToTimeComponentConverter x:Key="timeConverter"/>
     </ContentPage.Resources>
     <ContentPage.Content>
