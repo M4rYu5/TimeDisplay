@@ -17,9 +17,11 @@ namespace TimeDisplay.Services
         private readonly Timer timer;
 
         /// <param name="updateInterval">Specify the interval between calls, in ms</param>
-        public ClockDateTimeUpdater(int updateInterval)
+        public ClockDateTimeUpdater(int updateInterval, params IUpdateable[] clocks)
         {
             timer = new Timer(Update, null, 0, updateInterval);
+            foreach (var clock in clocks)
+                Add(clock);
         }
 
         private void Update(object state)
@@ -35,7 +37,7 @@ namespace TimeDisplay.Services
                     }
                     else
                         toRemove.Add(clock);
-                foreach(var item in toRemove)
+                foreach (var item in toRemove)
                     clocksToUpdate.Remove(item);
             }
         }
@@ -73,9 +75,10 @@ namespace TimeDisplay.Services
 
             lock (_lock)
             {
-                clocksToUpdate.RemoveAll((c) => {
-                    if(c.TryGetTarget(out var item))
-                        if(item == toUpdate)
+                clocksToUpdate.RemoveAll((c) =>
+                {
+                    if (c.TryGetTarget(out var item))
+                        if (item == toUpdate)
                             return true;
                     return false;
                 });
