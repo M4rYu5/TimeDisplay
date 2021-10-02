@@ -18,7 +18,6 @@ namespace TimeDisplay.ViewModels
         public ClockViewModel(ClockModel model = null)
         {
             model ??= new ClockModel();
-            if (model == null) throw new ArgumentNullException(nameof(model));
 
             Name = model.Name;
             TimeZoneDifferenceToUTC = model.TimeZoneDifferenceToUTC;
@@ -33,7 +32,7 @@ namespace TimeDisplay.ViewModels
                 Update();
             }
         }
-        public DateTime DateTime { get => dateTime; set => SetProperty(ref dateTime, value); }
+        public DateTime DateTime { get => dateTime; private set => SetProperty(ref dateTime, value); }
 
 
         public void Update() => DateTime = DateTime.UtcNow + TimeZoneDifferenceToUTC;
