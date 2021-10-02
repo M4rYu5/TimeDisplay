@@ -2,7 +2,9 @@
 <Shell xmlns="http://xamarin.com/schemas/2014/forms"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:pages="clr-namespace:TimeDisplay.Views.Pages"
-       xmlns:behaviors="clr-namespace:TimeDisplay.Behaviors" xmlns:views="clr-namespace:TimeDisplay.Views.Views" xmlns:viewmodels="clr-namespace:TimeDisplay.ViewModels" xmlns:models="clr-namespace:TimeDisplay.Models"
+       xmlns:behaviors="clr-namespace:TimeDisplay.Behaviors" xmlns:views="clr-namespace:TimeDisplay.Views.Views" 
+       xmlns:viewmodels="clr-namespace:TimeDisplay.ViewModels" xmlns:models="clr-namespace:TimeDisplay.Models" 
+       xmlns:services="clr-namespace:TimeDisplay.Services"
        x:Class="TimeDisplay.Views.Pages.AppShell"
        Shell.BackgroundColor="{DynamicResource Background2}"
        Shell.UnselectedColor="{DynamicResource SecondaryTextColor}"
@@ -40,6 +42,9 @@
             </Setter>
         </Style>
     </Shell.Resources>
+    <Shell.FlyoutHeader>
+        <views:DigitalClock x:Name="ShellHeaderDigitalClock"/>
+    </Shell.FlyoutHeader>
     <ShellContent Title="Times"  ContentTemplate="{DataTemplate pages:DisplayAll}">
         <ShellContent.Icon>
             <FontImageSource Glyph="⌚"/>
