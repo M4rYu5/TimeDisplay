@@ -10,6 +10,7 @@ namespace TimeDisplay.ViewModels
 {
     public class ClockViewModel : BaseViewModel, IUpdateable
     {
+        private int id;
         private string name;
         private TimeSpan timeZoneDifferenceToUTC;
         private DateTime dateTime;
@@ -23,10 +24,12 @@ namespace TimeDisplay.ViewModels
             TimeZoneDifferenceToUTC = model.TimeZoneDifferenceToUTC;
         }
 
+        public int ID { get { return id; } set { SetProperty(ref id, value); } }
         public string Name { get { return name; } set { SetProperty(ref name, value); } }
         public TimeSpan TimeZoneDifferenceToUTC
         {
-            get => timeZoneDifferenceToUTC; set
+            get => timeZoneDifferenceToUTC;
+            set
             {
                 SetProperty(ref timeZoneDifferenceToUTC, value);
                 Update();
