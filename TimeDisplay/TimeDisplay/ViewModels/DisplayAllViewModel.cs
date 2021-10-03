@@ -23,7 +23,8 @@ namespace TimeDisplay.ViewModels
             get => clocks;
             set
             {
-                Clocks.CollectionChanged -= ClocksCollectionChanged;
+                if (Clocks != null)
+                    Clocks.CollectionChanged -= ClocksCollectionChanged;
                 SetProperty(ref clocks, value);
                 Clocks.CollectionChanged += ClocksCollectionChanged;
             }
