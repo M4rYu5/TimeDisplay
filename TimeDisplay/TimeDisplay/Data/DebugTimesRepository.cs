@@ -12,11 +12,11 @@ namespace TimeDisplay.Data
     {
         private readonly List<ClockModel> debugList = new List<ClockModel>()
         {
-            new ClockModel(){Name = "UTC", TimeZoneDifferenceToUTC = TimeSpan.Zero},
-            new ClockModel(){Name = "UTC+1", TimeZoneDifferenceToUTC = TimeSpan.FromHours(1)},
-            new ClockModel(){Name = "UTC+2", TimeZoneDifferenceToUTC = TimeSpan.FromHours(2)},
-            new ClockModel(){Name = "UTC-5", TimeZoneDifferenceToUTC = TimeSpan.FromHours(-5)},
-            new ClockModel(){Name = "PDT", TimeZoneDifferenceToUTC = TimeSpan.FromHours(-7)},
+            new ClockModel(){ID = 1, Name = "UTC", TimeZoneDifferenceToUTC = TimeSpan.Zero},
+            new ClockModel(){ID = 2, Name = "UTC+1", TimeZoneDifferenceToUTC = TimeSpan.FromHours(1)},
+            new ClockModel(){ID = 3, Name = "UTC+2", TimeZoneDifferenceToUTC = TimeSpan.FromHours(2)},
+            new ClockModel(){ID = 4, Name = "UTC-5", TimeZoneDifferenceToUTC = TimeSpan.FromHours(-5)},
+            new ClockModel(){ID = 5, Name = "PDT", TimeZoneDifferenceToUTC = TimeSpan.FromHours(-7)},
         };
 
         public async Task<bool> Add(ClockModel model)
