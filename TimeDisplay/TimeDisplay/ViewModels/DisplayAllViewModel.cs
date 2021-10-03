@@ -23,7 +23,7 @@ namespace TimeDisplay.ViewModels
         public DisplayAllViewModel()
         {
             repository = (IClockRepository)Data.RepositoryFactory.GetRepository<ClockModel>();
-            Clocks = new ObservableCollection<ClockViewModel>(repository.GetAll().GetAwaiter().GetResult().Select(s => new ClockViewModel(s)));
+            Clocks = new ObservableCollection<ClockViewModel>(repository.GetAll().GetAwaiter().GetResult().Select(s => ClockViewModel.FromModel(s)));
             Clocks.CollectionChanged += ClocksCollectionChanged;
 
             clockUpdater = new ClockDateTimeUpdater(UpdateInterval);

@@ -16,14 +16,6 @@ namespace TimeDisplay.ViewModels
         private DateTime dateTime;
 
 
-        public ClockViewModel(ClockModel model = null)
-        {
-            model ??= new ClockModel();
-
-            Name = model.Name;
-            TimeZoneDifferenceToUTC = model.TimeZoneDifferenceToUTC;
-        }
-
         public int ID { get { return id; } set { SetProperty(ref id, value); } }
         public string Name { get { return name; } set { SetProperty(ref name, value); } }
         public TimeSpan TimeZoneDifferenceToUTC
@@ -37,7 +29,20 @@ namespace TimeDisplay.ViewModels
         }
         public DateTime DateTime { get => dateTime; private set => SetProperty(ref dateTime, value); }
 
-
         public void Update() => DateTime = DateTime.UtcNow + TimeZoneDifferenceToUTC;
+
+        /// <summary>
+        /// Generate a new ClockViewModel base on specified model <\br>
+        /// Note: Those propertyes are not set by reference
+        /// </summary>
+        public static ClockViewModel FromModel(ClockModel model)
+        {
+            return new ClockViewModel()
+            {
+                ID = model.ID,
+                Name = model.Name,
+                TimeZoneDifferenceToUTC = model.TimeZoneDifferenceToUTC
+            };
+        }
     }
 }
