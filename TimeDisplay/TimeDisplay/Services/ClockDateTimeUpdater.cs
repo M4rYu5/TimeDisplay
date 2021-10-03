@@ -85,6 +85,18 @@ namespace TimeDisplay.Services
             }
         }
 
+        /// <summary>
+        /// Stop updating all elements by remving all of them from the internal list of WeakReferences 
+        /// </summary>
+        /// <param name="toUpdate">Element to be removerd</param>
+        public void Clear()
+        {
+            lock (_lock)
+            {
+                clocksToUpdate.Clear();
+            }
+        }
+
         public void Dispose()
         {
             lock (_lock)
