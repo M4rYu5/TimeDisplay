@@ -45,10 +45,11 @@
     <Shell.FlyoutHeader>
         <views:DigitalClock x:Name="ShellHeaderDigitalClock"/>
     </Shell.FlyoutHeader>
-    <ShellContent Title="Times"  ContentTemplate="{DataTemplate pages:DisplayAll}">
+    
+    <!-- Content -->
+    <ShellContent Title="Times" Route="times"  ContentTemplate="{DataTemplate pages:DisplayAll}">
         <ShellContent.Icon>
             <FontImageSource Glyph="⌚"/>
         </ShellContent.Icon>
     </ShellContent>
-
 </Shell>
