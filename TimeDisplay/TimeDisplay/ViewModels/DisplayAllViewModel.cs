@@ -32,6 +32,7 @@ namespace TimeDisplay.ViewModels
         public DisplayAllViewModel()
         {
             repository = (IClockRepository)Data.RepositoryFactory.GetRepository<ClockModel>();
+            // todo: make this to work async (see Refresh)
             Clocks = new ObservableCollection<ClockViewModel>(repository.GetAll().GetAwaiter().GetResult().Select(s => ClockViewModel.FromModel(s)));
 
             clockUpdater = new ClockDateTimeUpdater(UpdateInterval);
@@ -50,11 +51,29 @@ namespace TimeDisplay.ViewModels
                 clockUpdater.Add(item);
         }
 
+        // todo: Can I make this nicer?
         private void ActualizeRepository(IEnumerable<ClockViewModel> addedItems, IEnumerable<ClockViewModel> removedItems)
         {
             _ = repository.RemoveRange((IEnumerable<ClockModel>)removedItems).GetAwaiter().GetResult();
             _ = repository.AddRange((IEnumerable<ClockModel>)addedItems).GetAwaiter().GetResult();
         }
+
+        // todo: add a refresh function, something like this,
+        // also should check if the server state changed
+        //public void Refresh()
+        //{
+        //    Task.Run(async () =>
+        //    {
+        //        var list = await repository.GetAll();
+        //        var clockViewModels = list.Select(s => ClockViewModel.FromModel(s)).ToList();
+        //        Device.BeginInvokeOnMainThread(() =>
+        //        {
+        //            Clocks = new ReadOnlyCollection<ClockViewModel>(clockViewModels);
+        //            foreach (var item in Clocks)
+        //                clockUpdater.Add(item);
+        //        });
+        //    });
+        //}
 
         private bool disposed;
         public void Dispose()
