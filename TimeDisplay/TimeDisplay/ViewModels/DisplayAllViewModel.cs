@@ -15,16 +15,24 @@ namespace TimeDisplay.ViewModels
         private const int UpdateInterval = 100; //ms
 
         private readonly IClockRepository repository;
-        private ObservableCollection<ClockViewModel> clock = new ObservableCollection<ClockViewModel>();
+        private ObservableCollection<ClockViewModel> clocks;
         private readonly ClockDateTimeUpdater clockUpdater;
 
-        public ObservableCollection<ClockViewModel> Clocks { get => clock; set => SetProperty(ref clock, value); }
+        public ObservableCollection<ClockViewModel> Clocks
+        {
+            get => clocks;
+            set
+            {
+                Clocks.CollectionChanged -= ClocksCollectionChanged;
+                SetProperty(ref clocks, value);
+                Clocks.CollectionChanged += ClocksCollectionChanged;
+            }
+        }
 
         public DisplayAllViewModel()
         {
             repository = (IClockRepository)Data.RepositoryFactory.GetRepository<ClockModel>();
             Clocks = new ObservableCollection<ClockViewModel>(repository.GetAll().GetAwaiter().GetResult().Select(s => ClockViewModel.FromModel(s)));
-            Clocks.CollectionChanged += ClocksCollectionChanged;
 
             clockUpdater = new ClockDateTimeUpdater(UpdateInterval);
             foreach (var item in Clocks)
