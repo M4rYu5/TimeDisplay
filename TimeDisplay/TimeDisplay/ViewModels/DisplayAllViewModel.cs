@@ -44,7 +44,7 @@ namespace TimeDisplay.ViewModels
 
         private void ActualizeRepository(IEnumerable<ClockViewModel> addedItems, IEnumerable<ClockViewModel> removedItems)
         {
-            _ = repository.RemoveRange((IEnumerable<ClockModel>)addedItems).GetAwaiter().GetResult();
+            _ = repository.RemoveRange((IEnumerable<ClockModel>)removedItems).GetAwaiter().GetResult();
             _ = repository.AddRange((IEnumerable<ClockModel>)addedItems).GetAwaiter().GetResult();
         }
 
