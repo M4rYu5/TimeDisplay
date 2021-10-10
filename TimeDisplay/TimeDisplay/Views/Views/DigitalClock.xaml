@@ -11,10 +11,11 @@
         <ResourceDictionary Source="..\..\..\Resources\Styles\DigitalClockStyle.xaml"/>
     </ContentView.Resources>
     <ContentView.Content>
-        <Frame StyleClass="ZeroPadding, Background2, DigitalClockBorder, Shadow">
+        <Frame x:Name="Frame" StyleClass="ZeroPadding, Background2, DigitalClockBorder, Shadow">
             <StackLayout StyleClass="ZeroMargin, ZeroPadding, ZeroSpacing" 
                          Orientation="Vertical">
-                <Label StyleClass="ZeroMargin, ZeroPadding, DigitalClockNameStyle" 
+                <Label x:Name="ZoneName" 
+                       StyleClass="ZeroMargin, ZeroPadding, DigitalClockNameStyle"
                        Text="{Binding Name}"/>
                 <StackLayout Orientation="Horizontal"
                              StyleClass="ZeroMargin, ZeroPadding, ZeroSpacing, CenterHorizontal, DigitalClockTimeTextContainerStyle">
