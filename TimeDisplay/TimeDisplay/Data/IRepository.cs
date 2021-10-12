@@ -5,13 +5,13 @@ using TimeDisplay.Models;
 
 namespace TimeDisplay.Data
 {
-    public interface IRepository<T>
+    public interface IRepository<Key, T>
     {
+        Task<T> Get(Key key);
         Task<IEnumerable<T>> GetAll();
         Task<bool> Add(T model);
-        Task<bool> Remove(T model);
-        Task<bool> Update(T old, T @new);
-        Task<bool> AddRange(IEnumerable<T> range);
-        Task<bool> RemoveRange(IEnumerable<T> range);
+        Task<bool> Remove(Key key);
+        Task<bool> Update(Key key, T @new);
+        Task<bool> RemoveRange(IEnumerable<Key> keys);
     }
 }

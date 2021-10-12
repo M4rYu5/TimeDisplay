@@ -32,7 +32,7 @@ namespace TimeDisplay.ViewModels
 
         public DisplayAllViewModel()
         {
-            repository = (IClockRepository)Data.RepositoryFactory.GetRepository<ClockModel>();
+            repository = (IClockRepository)Data.RepositoryFactory.GetRepository<int, ClockModel>();
             // todo: make this to work async (see Refresh)
             Clocks = new ObservableCollection<ClockViewModel>(repository.GetAll().GetAwaiter().GetResult().Select(s => ClockViewModel.FromModel(s)));
 
@@ -55,8 +55,9 @@ namespace TimeDisplay.ViewModels
         // todo: Can I make this nicer?
         private void ActualizeRepository(IEnumerable<ClockViewModel> addedItems, IEnumerable<ClockViewModel> removedItems)
         {
-            _ = repository.RemoveRange((IEnumerable<ClockModel>)removedItems).GetAwaiter().GetResult();
-            _ = repository.AddRange((IEnumerable<ClockModel>)addedItems).GetAwaiter().GetResult();
+            _ = repository.RemoveRange(removedItems.Select(x => x.ID)).GetAwaiter().GetResult();
+            foreach (var item in addedItems)
+                _ = repository.Add(item.ToModel()).GetAwaiter().GetResult();
         }
 
         // todo: add a refresh function, something like this,

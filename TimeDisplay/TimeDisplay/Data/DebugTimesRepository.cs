@@ -10,29 +10,27 @@ namespace TimeDisplay.Data
 {
     class DebugTimesRepository : IClockRepository
     {
-        private readonly List<ClockModel> debugList = new List<ClockModel>()
+        private readonly Dictionary<int, ClockModel> debugList = new Dictionary<int, ClockModel>
         {
-            new ClockModel(){ID = 1, Name = "UTC", TimeZoneDifferenceToUTC = TimeSpan.Zero},
-            new ClockModel(){ID = 2, Name = "UTC+1", TimeZoneDifferenceToUTC = TimeSpan.FromHours(1)},
-            new ClockModel(){ID = 3, Name = "UTC+2", TimeZoneDifferenceToUTC = TimeSpan.FromHours(2)},
-            new ClockModel(){ID = 4, Name = "UTC-5", TimeZoneDifferenceToUTC = TimeSpan.FromHours(-5)},
-            new ClockModel(){ID = 5, Name = "PDT", TimeZoneDifferenceToUTC = TimeSpan.FromHours(-7)},
+            {1, new ClockModel(){ID = 1, Name = "UTC", TimeZoneDifferenceToUTC = TimeSpan.Zero}},
+            {2, new ClockModel(){ID = 2, Name = "UTC+1", TimeZoneDifferenceToUTC = TimeSpan.FromHours(1)}},
+            {3, new ClockModel(){ID = 3, Name = "UTC+2", TimeZoneDifferenceToUTC = TimeSpan.FromHours(2)}},
+            {4, new ClockModel(){ID = 4, Name = "UTC-5", TimeZoneDifferenceToUTC = TimeSpan.FromHours(-5)}},
+            {5, new ClockModel(){ID = 5, Name = "PDT", TimeZoneDifferenceToUTC = TimeSpan.FromHours(-7)} },
         };
 
         public async Task<bool> Add(ClockModel model)
         {
-            debugList.Add(model);
+            if (model == null)
+                throw new ArgumentNullException(nameof(model));
+            if (model.ID != -1)
+                throw new ArgumentException("The model should have an id equal to -1. Try Update to change an object", nameof(model));
+
+            model.ID = debugList.Count == 0 ? 0 : debugList.Last().Key + 1;
+            debugList.Add(model.ID, model);
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> AddRange(IEnumerable<ClockModel> range)
-        {
-            if (range == null)
-                return await Task.FromResult(false);
-
-            debugList.AddRange(range);
-            return await Task.FromResult(true);
-        }
 
         public async Task<bool> Clear()
         {
@@ -40,30 +38,48 @@ namespace TimeDisplay.Data
             return await Task.FromResult(true);
         }
 
-        public async Task<IEnumerable<ClockModel>> GetAll()
+
+        public async Task<ClockModel> Get(int key)
         {
-            return await Task.FromResult((IEnumerable<ClockModel>)debugList);
+            if (debugList.ContainsKey(key))
+                return await Task.FromResult(debugList[key]);
+
+            return await Task.FromResult((ClockModel)null);
         }
 
-        public async Task<bool> Remove(ClockModel model)
+        public async Task<IEnumerable<ClockModel>> GetAll()
         {
-            bool success = debugList.Remove(model);
+            return await Task.FromResult(debugList.Select(x => x.Value));
+        }
+
+        public async Task<bool> Remove(int key)
+        {
+            bool success = debugList.Remove(key);
             return await Task.FromResult(success);
         }
 
-        public async Task<bool> RemoveRange(IEnumerable<ClockModel> range)
+        public async Task<bool> RemoveRange(IEnumerable<int> keys)
         {
-            if (range == null)
+            if (keys == null)
                 return await Task.FromResult(false);
 
-            debugList.RemoveAll(c => range.Contains(c));
+            foreach (var key in keys)
+                if (!debugList.ContainsKey(key))
+                    return await Task.FromResult(false);
+
+            foreach (var key in keys)
+                debugList.Remove(key);
+
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> Update(ClockModel old, ClockModel @new)
+        public async Task<bool> Update(int key, ClockModel @new)
         {
-            await Remove(old);
-            await Add(@new);
+            if (!debugList.ContainsKey(key))
+                return await Task.FromResult(false);
+
+            @new.ID = key;
+            debugList[key] = @new;
             return await Task.FromResult(true);
         }
     }

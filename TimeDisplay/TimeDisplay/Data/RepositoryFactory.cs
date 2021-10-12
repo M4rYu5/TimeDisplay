@@ -10,10 +10,10 @@ namespace TimeDisplay.Data
     {
         private const bool useFakeValues = true;
 
-        public static IRepository<T> GetRepository<T>()
+        public static IRepository<Key, T> GetRepository<Key, T>()
         {
             if (typeof(T) == typeof(ClockModel))
-                return useFakeValues ? (IRepository<T>) new DebugTimesRepository() : throw new NotImplementedException();
+                return useFakeValues ? (IRepository<Key, T>) new DebugTimesRepository() : throw new NotImplementedException();
 
             throw new NotImplementedException();
         }

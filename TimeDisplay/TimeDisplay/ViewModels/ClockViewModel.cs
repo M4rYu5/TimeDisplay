@@ -32,7 +32,7 @@ namespace TimeDisplay.ViewModels
         public void Update() => DateTime = DateTime.UtcNow + TimeZoneDifferenceToUTC;
 
         /// <summary>
-        /// Generate a new ClockViewModel base on specified model <\br>
+        /// Generate a new ClockViewModel from a specified model <\br>
         /// Note: Those propertyes are not set by reference
         /// </summary>
         public static ClockViewModel FromModel(ClockModel model)
@@ -42,6 +42,25 @@ namespace TimeDisplay.ViewModels
                 ID = model.ID,
                 Name = model.Name,
                 TimeZoneDifferenceToUTC = model.TimeZoneDifferenceToUTC
+            };
+        }
+    }
+
+    /// <summary>
+    /// Stores the ClockViewModel's extensions
+    /// </summary>
+    public static class ClockViewModelExtensions
+    {
+        /// <summary>
+        /// Creates a new ClockModel from a ClockViewModel <\br>
+        /// </summary>
+        public static ClockModel ToModel(this ClockViewModel vm)
+        {
+            return new ClockModel()
+            {
+                ID = vm.ID,
+                Name = vm.Name,
+                TimeZoneDifferenceToUTC = vm.TimeZoneDifferenceToUTC
             };
         }
     }

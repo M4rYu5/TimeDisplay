@@ -6,7 +6,7 @@ using TimeDisplay.Models;
 
 namespace TimeDisplay.Data
 {
-    public interface IClockRepository : IRepository<ClockModel>
+    public interface IClockRepository : IRepository<int, ClockModel>
     {
         Task<bool> Clear();
     }
