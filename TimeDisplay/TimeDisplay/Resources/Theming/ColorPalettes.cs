@@ -14,29 +14,77 @@ namespace TimeDisplay.Resources.Theming
     public static class ColorPalettes
     {
 
-        public const string OsDefault = "OsDefault";
-        public const string Dark = "Dark";
-        public const string Light = "Light";
+        /// <summary>
+        /// App supported color scheme.
+        /// </summary>
+        /// <remarks>
+        /// When changed, make sure you add/rename/remove localized names into Resources/Localization/ThemeNames <\br>
+        /// Also you have to add it's resource (dictionary) to ColorPaletteFactory
+        /// </remarks>
+        public enum ColorScheme
+        {
+            OsDefault = 0,
+            Dark,
+            Light,
+        }
 
         /// <summary>
-        /// Contains all color palettes so it is easier to enumerate through them
+        /// Return the localized name of this ColorScheme
         /// </summary>
-        public static IEnumerable<string> Palettes { get; } = new List<string> { OsDefault, Dark, Light };
+        public static string GetLocalizedName(this ColorScheme scheme)
+        {
+            return Localization.ThemeNames.ResourceManager.GetString(scheme.GetName());
+        }
+
+        /// <summary>
+        /// Return the name of this ColorScheme
+        /// </summary>
+        public static string GetName(this ColorScheme scheme)
+        {
+            return Enum.GetName(typeof(ColorScheme), scheme);
+        }
+
+        /// <summary>
+        /// Return the scheme from a given name
+        /// </summary>
+        /// <returns>
+        /// The color scheme, or null if not found
+        /// </returns>
+        public static ColorScheme? GetSchemeFromName(string name)
+        {
+            if (Enum.TryParse<ColorScheme>(name, out var scheme))
+                return scheme;
+            return null;
+        }
+
+
 
         /// <summary>
         /// Specify a link between system (OS) themes and application color pallets. <br/>
         /// </summary>
-        public static IDictionary<OSAppTheme, string> MapNativeThemes { get; } = new Dictionary<OSAppTheme, string>()
+        /// <remarks>
+        /// Don't assign the ColorScheme.OsDefault to a native theme
+        /// </remarks>
+        public static IDictionary<OSAppTheme, ColorScheme> MapNativeThemes { get; } = new Dictionary<OSAppTheme, ColorScheme>()
         {
-            {OSAppTheme.Light, Light },
-            {OSAppTheme.Dark, Dark },
-            {OSAppTheme.Unspecified, Dark }
+            {OSAppTheme.Light, ColorScheme.Light },
+            {OSAppTheme.Dark, ColorScheme.Dark },
+            {OSAppTheme.Unspecified, ColorScheme.Dark }
         };
 
         /// <summary>
         /// Return the localization values for all defiend themes / color palettes
         /// </summary>
-        public static IEnumerable<string> LocalizedPalettesValues { get => Palettes.Select(s => Localization.ThemeNames.ResourceManager.GetString(s)); }
+        public static IEnumerable<(ColorScheme, string)> LocalizedPalettesValues
+        {
+            get
+            {
+                foreach (ColorScheme theme in Enum.GetValues(typeof(ColorScheme)))
+                {
+                    yield return (theme, theme.GetLocalizedName());
+                }
+            }
+        }
 
         /// <summary>
         /// Get the localized value for a particular paletteName

@@ -19,15 +19,15 @@ namespace TimeDisplay.Resources.Theming
         /// </summary>
         /// <param name="palette">Palette name</param>
         /// <returns></returns>
-        public static ResourceDictionary Get(string palette)
+        public static ResourceDictionary Get(ColorPalettes.ColorScheme scheme)
         {
             //customized for system specifics
-            return palette switch
+            return scheme switch
             {
-                ColorPalettes.OsDefault => Get(ColorPalettes.MapNativeThemes[Application.Current.RequestedTheme]),
-                ColorPalettes.Dark => new DarkColorPaletteResourceDictionary(),
-                ColorPalettes.Light => new LightColorPaletteResourceDictionary(),
-                _ => throw new Exceptions.ThemeNotFoundException($"Undefined theme: \"{palette}\"."),
+                ColorPalettes.ColorScheme.OsDefault => Get(ColorPalettes.MapNativeThemes[Application.Current.RequestedTheme]),
+                ColorPalettes.ColorScheme.Dark => new DarkColorPaletteResourceDictionary(),
+                ColorPalettes.ColorScheme.Light => new LightColorPaletteResourceDictionary(),
+                _ => throw new Exceptions.ThemeNotFoundException($"Undefined theme: \"{scheme.GetName()}\"."),
             };
         }
     }

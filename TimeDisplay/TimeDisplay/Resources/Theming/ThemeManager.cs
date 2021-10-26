@@ -22,7 +22,7 @@ namespace TimeDisplay.Resources.Theming
         /// <param name="app">Set application, null to remove it</param>
         public static void Init(Application app)
         {
-            if(ThemeManager.app != null)
+            if (ThemeManager.app != null)
             {
                 app.Resources.MergedDictionaries.Remove(colorPaletteContainer);
                 app.RequestedThemeChanged -= AppRequestedThemeChanged;
@@ -37,31 +37,35 @@ namespace TimeDisplay.Resources.Theming
         // when the system theme changed
         private static void AppRequestedThemeChanged(object sender, AppThemeChangedEventArgs e)
         {
-            var defaultTheme = Preferences.Get(themePreferenceKey, ColorPalettes.OsDefault);
-            // we are going to change the app acordingly, only if the theme is sest based on the system defaults
-            if (defaultTheme == ColorPalettes.OsDefault)
-                SetTheme(defaultTheme);
+            // we are going to change the app acordingly, only if the theme is ses based on the system defaults
+            if (CurrentTheme == ColorPalettes.ColorScheme.OsDefault)
+            {
+                var scheme = ColorPalettes.GetSchemeFromName(CurrentTheme.GetName()) ?? ColorPalettes.ColorScheme.OsDefault;
+                // when the color is set base of the os default we should always refresh the theme.
+                CurrentTheme = scheme;
+            }
+        }
+
+        public static ColorPalettes.ColorScheme CurrentTheme
+        {
+            get
+            {
+                var themePrefName = Preferences.Get(themePreferenceKey, ColorPalettes.ColorScheme.OsDefault.GetName());
+                return ColorPalettes.GetSchemeFromName(themePrefName) ?? ColorPalettes.ColorScheme.OsDefault;
+            }
+            set
+            {
+                Preferences.Set(themePreferenceKey, value.GetName());
+                colorPaletteContainer.MergedDictionaries.Clear();
+                colorPaletteContainer.MergedDictionaries.Add(ColorPaletteFactory.Get(value));
+            }
         }
 
         private static void ApplyTheme()
         {
-            string savedThemeName = Preferences.Get(themePreferenceKey, ColorPalettes.OsDefault);
-            SetTheme(savedThemeName);
-        }
-
-        /// <summary>
-        /// Set the theme, according to the (static) ColorPalettes constant options or its Palette property
-        /// </summary>
-        /// <param name="themeName">Theme name (oen of the constant fields from ColorPalettes class)</param>
-        /// <exception cref="Exceptions.NotInitializedException">Init function must be called first</exception>
-        public static void SetTheme(string themeName)
-        {
-            if (!ColorPalettes.Palettes.Contains(themeName))
-                throw new Exceptions.ThemeNotFoundException("Cannot set this theme: Invalid theme name");
-
-            Preferences.Set(themePreferenceKey, themeName);
-            colorPaletteContainer.MergedDictionaries.Clear();
-            colorPaletteContainer.MergedDictionaries.Add(ColorPaletteFactory.Get(themeName));
+            string savedThemeName = Preferences.Get(themePreferenceKey, ColorPalettes.ColorScheme.OsDefault.GetName());
+            var theme = ColorPalettes.GetSchemeFromName(savedThemeName);
+            CurrentTheme = theme ?? ColorPalettes.ColorScheme.OsDefault;
         }
 
         private class BaseColorPaletteResourceDictionary : ResourceDictionary { };
