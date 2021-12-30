@@ -24,5 +24,12 @@ namespace TimeDisplay.Views.Pages
             if (Parent == null)
                 DisplayAllVM.Dispose();
         }
+
+        private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        {
+            var vm = ((ViewModels.ClockViewModel)((View)sender).BindingContext);
+            var uri = "details?id=" + vm.ID;
+            await Shell.Current.GoToAsync(uri);
+        }
     }
 }

@@ -11,26 +11,8 @@
     <ContentPage.Resources>
         <viewmodels:DisplayAllViewModel x:Name="DisplayAllVM" x:Key="clockView"/>
         <views:DateTimeToTimeComponentConverter x:Key="timeConverter"/>
-
-        <!-- selected clock style -->
-        <Style TargetType="views:DigitalClock">
-            <Setter Property="VisualStateManager.VisualStateGroups">
-                <VisualStateGroupList>
-                    <VisualStateGroup x:Name="CommonStates">
-                        <VisualState x:Name="Normal" />
-                        <VisualState x:Name="Selected">
-                            <VisualState.Setters>
-                                <Setter TargetName="Frame" Property="Frame.BorderColor" Value="{StaticResource Highlight}"/>
-                                <Setter TargetName="ZoneName" Property="Label.TextColor" Value="{StaticResource Highlight}"/>
-                                <Setter Property="BackgroundColor" Value="Transparent"/>
-                            </VisualState.Setters>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateGroupList>
-            </Setter>
-        </Style>
     </ContentPage.Resources>
-    
+
     <!-- CONTENT -->
     <ContentPage.Content>
         <CollectionView x:Name="TimesColection" 
@@ -46,7 +28,11 @@
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <views:DigitalClock/>
+                    <views:DigitalClock>
+                        <views:DigitalClock.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                        </views:DigitalClock.GestureRecognizers>
+                    </views:DigitalClock>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
