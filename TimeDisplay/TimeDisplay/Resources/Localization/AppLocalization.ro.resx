@@ -117,7 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ClockDetailsPageDifferenceToUTC" xml:space="preserve">
+    <value>Diferență față de UTC:</value>
+  </data>
+  <data name="ClockDetailsPageName" xml:space="preserve">
+    <value>Nume:</value>
+  </data>
+  <data name="ClockDetails_ClockIdNotFound" xml:space="preserve">
+    <value>Elementul specificat nu a putut fi găsit.</value>
+  </data>
+  <data name="CustomTimerPickerHour" xml:space="preserve">
+    <value>Ore:</value>
+  </data>
+  <data name="CustomTimerPickerMin" xml:space="preserve">
+    <value>Minute:</value>
+  </data>
   <data name="ShellHeaderTimeName" xml:space="preserve">
     <value>Acum:</value>
+  </data>
+  <data name="Save_Changes" xml:space="preserve">
+    <value>Salvează schimbările</value>
   </data>
 </root>

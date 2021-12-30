@@ -117,7 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ClockDetailsPageDifferenceToUTC" xml:space="preserve">
+    <value>Difference to UTC:</value>
+  </data>
+  <data name="ClockDetailsPageName" xml:space="preserve">
+    <value>Name:</value>
+  </data>
+  <data name="ClockDetails_ClockIdNotFound" xml:space="preserve">
+    <value>Couldn't found the specified item.</value>
+  </data>
+  <data name="CustomTimerPickerHour" xml:space="preserve">
+    <value>Hours:</value>
+  </data>
+  <data name="CustomTimerPickerMin" xml:space="preserve">
+    <value>Minutes:</value>
+  </data>
   <data name="ShellHeaderTimeName" xml:space="preserve">
     <value>Now:</value>
+  </data>
+  <data name="Save_Changes" xml:space="preserve">
+    <value>Save Chages</value>
   </data>
 </root>

@@ -19,7 +19,7 @@ namespace TimeDisplay.Resources.Localization {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class AppLocalization {
@@ -57,6 +57,60 @@ namespace TimeDisplay.Resources.Localization {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Couldn&apos;t found the specified item..
+        /// </summary>
+        internal static string ClockDetails_ClockIdNotFound {
+            get {
+                return ResourceManager.GetString("ClockDetails_ClockIdNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Difference to UTC:.
+        /// </summary>
+        internal static string ClockDetailsPageDifferenceToUTC {
+            get {
+                return ResourceManager.GetString("ClockDetailsPageDifferenceToUTC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name:.
+        /// </summary>
+        internal static string ClockDetailsPageName {
+            get {
+                return ResourceManager.GetString("ClockDetailsPageName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hours:.
+        /// </summary>
+        internal static string CustomTimerPickerHour {
+            get {
+                return ResourceManager.GetString("CustomTimerPickerHour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minutes:.
+        /// </summary>
+        internal static string CustomTimerPickerMin {
+            get {
+                return ResourceManager.GetString("CustomTimerPickerMin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Chages.
+        /// </summary>
+        internal static string Save_Changes {
+            get {
+                return ResourceManager.GetString("Save_Changes", resourceCulture);
             }
         }
         
