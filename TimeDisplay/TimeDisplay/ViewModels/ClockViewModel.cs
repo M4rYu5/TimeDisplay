@@ -10,7 +10,7 @@ namespace TimeDisplay.ViewModels
 {
     public class ClockViewModel : BaseViewModel, IUpdateable
     {
-        private int id;
+        private int id = -1;
         private string name;
         private TimeSpan timeZoneDifferenceToUTC;
         private DateTime dateTime;
