@@ -70,6 +70,69 @@ namespace TimeDisplay.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name too long. Max 20 characters..
+        /// </summary>
+        internal static string ClockDetailsPage_ErrorNameLengthMax {
+            get {
+                return ResourceManager.GetString("ClockDetailsPage_ErrorNameLengthMax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Required field..
+        /// </summary>
+        internal static string ClockDetailsPage_ErrorRequired {
+            get {
+                return ResourceManager.GetString("ClockDetailsPage_ErrorRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &quot;:&quot; separator is missing..
+        /// </summary>
+        internal static string ClockDetailsPage_ErrorUTCSeparatorNeeded {
+            get {
+                return ResourceManager.GetString("ClockDetailsPage_ErrorUTCSeparatorNeeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to invalid characters..
+        /// </summary>
+        internal static string ClockDetailsPage_InvalidTimeCharacterPostPlur {
+            get {
+                return ResourceManager.GetString("ClockDetailsPage_InvalidTimeCharacterPostPlur", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to invalid character..
+        /// </summary>
+        internal static string ClockDetailsPage_InvalidTimeCharacterPostSing {
+            get {
+                return ResourceManager.GetString("ClockDetailsPage_InvalidTimeCharacterPostSing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The time difference should be written as &quot;±hh:mm&quot;..
+        /// </summary>
+        internal static string ClockDetailsPage_InvalidTimeDifference {
+            get {
+                return ResourceManager.GetString("ClockDetailsPage_InvalidTimeDifference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ±hh:mm.
+        /// </summary>
+        internal static string ClockDetailsPage_UtcDifferenceFormat {
+            get {
+                return ResourceManager.GetString("ClockDetailsPage_UtcDifferenceFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Difference to UTC:.
         /// </summary>
         internal static string ClockDetailsPageDifferenceToUTC {

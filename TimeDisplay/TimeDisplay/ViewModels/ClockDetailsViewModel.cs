@@ -1,10 +1,14 @@
-﻿using System;
+﻿using MvvmValidation;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Windows.Input;
 using TimeDisplay.Data;
 using TimeDisplay.Models;
+using TimeDisplay.Resources.Localization;
 using Xamarin.Forms;
 
 namespace TimeDisplay.ViewModels
@@ -15,83 +19,109 @@ namespace TimeDisplay.ViewModels
     /// </summary>
     public class ClockDetailsViewModel : BaseViewModel, IQueryAttributable
     {
-        private IClockRepository repository;
-        private ClockViewModel originalClockViewModel;
+        private readonly ClockDetailVMModel currentClock = new ClockDetailVMModel();
+        private readonly IClockRepository repository;
+
+        private ClockDetailVMModel originalClockViewModel;
         private bool isBusy;
         private string repositoryIdNotFoundError;
+        private string nameError;
+        private string utcStringError;
         private bool modelChanged;
-        private readonly ClockModel currentClock = new ClockModel();
-
 
         public ClockDetailsViewModel(IClockRepository repository)
         {
             this.repository = repository;
             PropertyChanged += ClockDetailsViewModel_PropertyChanged;
+            InitValidation();
         }
 
         private void ClockDetailsViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (IsClockModleProperty(e.PropertyName))
             {
-                ClockModelChanged = CheckClockModelChanged();
+                UpdateClockModelChanged();
+                Validator.ValidateAll();
             }
-                
+
         }
+
 
         public bool IsBusy { get => isBusy; set => SetProperty(ref isBusy, value); }
         public string RepositoryIdNotFoundError { get => repositoryIdNotFoundError; set => SetProperty(ref repositoryIdNotFoundError, value); }
+        public string NameError { get => nameError; set => SetProperty(ref nameError, value); }
+        public string UtcStringError { get => utcStringError; set => SetProperty(ref utcStringError, value); }
         public bool ClockModelChanged { get => modelChanged; set => SetProperty(ref modelChanged, value); }
 
 
         public int ID
         {
-            get => currentClock.ID; 
+            get => currentClock.ID;
             set
             {
-                currentClock.ID = value;
-                OnPropertyChanged(nameof(ID));
+                if (value != currentClock.ID)
+                {
+                    currentClock.ID = value;
+                    OnPropertyChanged(nameof(ID));
+                }
             }
         }
-        public TimeSpan TimeZoneDifferenceToUTC { get => currentClock.TimeZoneDifferenceToUTC;
+        public string TimeZoneDifferenceToUtcString
+        {
+            get => currentClock.TimeZoneDifferenceToUtcString;
             set
             {
-                currentClock.TimeZoneDifferenceToUTC = value;
-                OnPropertyChanged(nameof(TimeZoneDifferenceToUTC));
+                if (value != currentClock.TimeZoneDifferenceToUtcString)
+                {
+                    currentClock.TimeZoneDifferenceToUtcString = value;
+                    OnPropertyChanged(nameof(TimeZoneDifferenceToUtcString));
+                }
             }
         }
-        public string Name { get => currentClock.Name;
+        public string Name
+        {
+            get => currentClock.Name;
             set
             {
-                currentClock.Name = value;
-                OnPropertyChanged(nameof(Name));
+                if (value != currentClock.Name)
+                {
+                    currentClock.Name = value;
+                    OnPropertyChanged(nameof(Name));
+                }
             }
         }
+
+
 
 
         public void ApplyQueryAttributes(IDictionary<string, string> query)
         {
             // process the 'id' query param; and setting the ID property
+            int localID;
             if (query.ContainsKey("id"))
             {
                 string idQueryParam = HttpUtility.UrlDecode(query["id"]);
                 if (int.TryParse(idQueryParam, out int id))
-                {
-                    ID = id;
-                    PullInfo(id);
-                }
+                    localID = id;
                 else
                     throw new ArgumentException("The shell query parameter 'id' cannot be converted into an int value");
             }
+            else
+                localID = -1;
+
+            PullInfo(localID);
+
 
         }
 
         private void PullInfo(int id)
         {
             int localID = id;
-            if(localID < 0)
+            if (localID < 0)
             {
-                originalClockViewModel = new ClockViewModel();
-                ID = localID;
+                //originalClockViewModel = new ClockDetailVMModel();
+                ID = -1;
+                UpdateClockModelChanged();
                 return;
             }
 
@@ -105,16 +135,17 @@ namespace TimeDisplay.ViewModels
                     {
                         RepositoryIdNotFoundError = Resources.Localization.AppLocalization.ClockDetails_ClockIdNotFound;
                         IsBusy = false;
+                        ID = localID;
                     });
                 else
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
                         var vm = ClockViewModel.FromModel(item);
-                        originalClockViewModel = vm;
+                        originalClockViewModel = ClockDetailVMModel.FromClockViewModel(vm);
                         ID = vm.ID;
                         Name = vm.Name;
-                        TimeZoneDifferenceToUTC = vm.TimeZoneDifferenceToUTC;
+                        TimeZoneDifferenceToUtcString = originalClockViewModel.TimeZoneDifferenceToUtcString;
                         IsBusy = false;
                     });
                 }
@@ -122,18 +153,25 @@ namespace TimeDisplay.ViewModels
         }
 
 
+
+        private void UpdateClockModelChanged()
+        {
+            ClockModelChanged = CheckClockModelChanged();
+        }
+
         private bool CheckClockModelChanged()
         {
             // check state
             if (IsBusy)
                 return false;
-            if(originalClockViewModel == null)
-                return false;
+
+            if (originalClockViewModel == null)
+                return true;
 
             // check changes
             if (Name != originalClockViewModel.Name)
                 return true;
-            if (TimeZoneDifferenceToUTC != originalClockViewModel.TimeZoneDifferenceToUTC)
+            if (TimeZoneDifferenceToUtcString != originalClockViewModel.TimeZoneDifferenceToUtcString)
                 return true;
 
             // default
@@ -142,7 +180,151 @@ namespace TimeDisplay.ViewModels
 
         private bool IsClockModleProperty(string propertyName)
         {
-            return propertyName == nameof(Name) || propertyName == nameof(TimeZoneDifferenceToUTC) || propertyName == nameof(ID);
+            return propertyName == nameof(Name) || propertyName == nameof(TimeZoneDifferenceToUtcString) || propertyName == nameof(ID);
+        }
+
+
+
+
+        #region Validation
+
+        protected ValidationHelper Validator { get; set; }
+
+        protected virtual void InitValidation()
+        {
+            Validator = new ValidationHelper();
+
+
+            Validator.AddRequiredRule(() => Name, AppLocalization.ClockDetailsPage_ErrorRequired);
+            Validator.AddRule(nameof(Name), () => RuleResult.Assert(Name.Length <= 20, AppLocalization.ClockDetailsPage_ErrorNameLengthMax));
+
+
+            Validator.AddRequiredRule(() => TimeZoneDifferenceToUtcString, AppLocalization.ClockDetailsPage_ErrorRequired);
+            Validator.AddRule(nameof(TimeZoneDifferenceToUtcString),
+                              () => RuleResult.Assert(TimeZoneDifferenceToUtcString.Contains(":"), AppLocalization.ClockDetailsPage_ErrorUTCSeparatorNeeded));
+            Validator.AddRule(nameof(TimeZoneDifferenceToUtcString),
+                              () =>
+                              {
+                                  char[] validChars = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', '-', '+', ' ' };
+                                  StringBuilder builder = new StringBuilder();
+                                  foreach (char c in TimeZoneDifferenceToUtcString)
+                                      if (!validChars.Contains(c))
+                                          builder.Append(c);
+                                  var unwantedCharacters = builder.ToString();
+
+                                  if (unwantedCharacters.Length == 0)
+                                      return RuleResult.Valid();
+
+                                  StringBuilder result = new StringBuilder();
+                                  result.Append('\'');
+                                  result.Append(string.Join("', '", unwantedCharacters.AsEnumerable().Distinct()));
+                                  result.Append("': ");
+                                  result.Append(unwantedCharacters.Length == 1 ? AppLocalization.ClockDetailsPage_InvalidTimeCharacterPostSing : AppLocalization.ClockDetailsPage_InvalidTimeCharacterPostPlur);
+                                  return RuleResult.Invalid(result.ToString());
+                              });
+            // invalid : delimiter location
+            Validator.AddRule(nameof(TimeZoneDifferenceToUtcString),
+                              () =>
+                              {
+                                  var index = TimeZoneDifferenceToUtcString.IndexOf(":");
+                                  if (index != 0 && index != TimeZoneDifferenceToUtcString.Length - 1)
+                                      return RuleResult.Valid();
+
+                                  return RuleResult.Invalid(AppLocalization.ClockDetailsPage_InvalidTimeDifference);
+                              });
+            // cannot convert to int
+            Validator.AddRule(nameof(TimeZoneDifferenceToUtcString),
+                              () =>
+                              {
+                                  if (!TimeZoneDifferenceToUtcString.Contains(":"))
+                                      return RuleResult.Invalid(AppLocalization.ClockDetailsPage_InvalidTimeDifference);
+
+                                  string[] splittedValues = TimeZoneDifferenceToUtcString.Split(':');
+                                  if (splittedValues.Length != 2)
+                                      return RuleResult.Invalid(AppLocalization.ClockDetailsPage_InvalidTimeDifference);
+
+                                  if (!int.TryParse(splittedValues[0], out _))
+                                      return RuleResult.Invalid(AppLocalization.ClockDetailsPage_InvalidTimeDifference);
+                                  if (!int.TryParse(splittedValues[1], out _))
+                                      return RuleResult.Invalid(AppLocalization.ClockDetailsPage_InvalidTimeDifference);
+
+                                  return RuleResult.Valid();
+                              });
+
+            // handle errors
+            Validator.ResultChanged += (sender, args) =>
+            {
+                if ((string)args.Target == nameof(Name))
+                    NameError = args.NewResult.ErrorList.FirstOrDefault()?.ErrorText;
+                if ((string)args.Target == nameof(TimeZoneDifferenceToUtcString))
+                    UtcStringError = args.NewResult.ErrorList.FirstOrDefault()?.ErrorText;
+            };
+        }
+        #endregion
+
+
+
+
+        private class ClockDetailVMModel : ClockModel
+        {
+            public string TimeZoneDifferenceToUtcString { get; set; }
+
+            public new TimeSpan TimeZoneDifferenceToUTC { get => StringToTimeSpanConverter(TimeZoneDifferenceToUtcString) ?? TimeSpan.Zero; }
+
+
+            public static TimeSpan? StringToTimeSpanConverter(string time)
+            {
+                if (string.IsNullOrWhiteSpace(time))
+                    return null;
+
+                var localTime = time.Replace(" ", "");
+
+                bool isNegative = localTime.StartsWith("-");
+                if (isNegative)
+                    localTime = localTime.Substring(1);
+
+                if (!localTime.Contains(":"))
+                    return null;
+
+                string[] splittedValues = localTime.Split(':');
+                if (splittedValues.Length != 2)
+                    return null;
+
+                if (!int.TryParse(splittedValues[0], out int hours))
+                    return null;
+                if (!int.TryParse(splittedValues[1], out int minutes))
+                    return null;
+
+                hours = isNegative ? -hours : hours;
+                minutes = isNegative ? -minutes : minutes;
+
+                return TimeSpan.FromHours(hours).Add(TimeSpan.FromMinutes(minutes));
+            }
+            public static string TimeSpanToStringConverter(TimeSpan timeSpan)
+            {
+                return timeSpan is TimeSpan span
+                ? (span <= TimeSpan.FromMinutes(-1) ? "-" : "") + span.ToString(@"h\:mm", System.Globalization.CultureInfo.InvariantCulture)
+                : null;
+            }
+
+            public static ClockDetailVMModel FromClockViewModel(ClockViewModel vm)
+            {
+                return new ClockDetailVMModel()
+                {
+                    ID = vm.ID,
+                    Name = vm.Name,
+                    TimeZoneDifferenceToUtcString = TimeSpanToStringConverter(vm.TimeZoneDifferenceToUTC),
+                };
+            }
+            public static ClockModel ToClockModel(ClockDetailVMModel vm)
+            {
+                return new ClockDetailVMModel()
+                {
+                    ID = vm.ID,
+                    Name = vm.Name,
+                    TimeZoneDifferenceToUtcString = TimeSpanToStringConverter(vm.TimeZoneDifferenceToUTC),
+                };
+            }
         }
     }
 }

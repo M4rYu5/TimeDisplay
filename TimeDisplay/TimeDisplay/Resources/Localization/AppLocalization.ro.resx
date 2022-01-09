@@ -138,8 +138,28 @@
   <data name="Save_Changes" xml:space="preserve">
     <value>Salvează schimbările</value>
   </data>
-
+  <data name="ClockDetailsPage_ErrorRequired" xml:space="preserve">
+    <value>Câmp necesar.</value>
+  </data>
+  <data name="ClockDetailsPage_ErrorNameLengthMax" xml:space="preserve">
+    <value>Numele este prea lung; limita este de 20 de caractere.</value>
+  </data>
+  <data name="ClockDetailsPage_ErrorUTCSeparatorNeeded" xml:space="preserve">
+    <value>Lipsește separatorul ":".</value>
+  </data>
+  <data name="ClockDetailsPage_InvalidTimeDifference" xml:space="preserve">
+    <value>Diferența de timp trebuie scrisa astfel "±hh:mm".</value>
+  </data>
   <data name="DisplayAll_MenuItemAddText" xml:space="preserve">
     <value>ADD</value>
+  </data>
+  <data name="ClockDetailsPage_InvalidTimeCharacterPostPlur" xml:space="preserve">
+    <value>caractere invalide.</value>
+  </data>
+  <data name="ClockDetailsPage_InvalidTimeCharacterPostSing" xml:space="preserve">
+    <value>caracter invalid.</value>
+  </data>
+  <data name="ClockDetailsPage_UtcDifferenceFormat" xml:space="preserve">
+    <value>±hh:mm</value>
   </data>
 </root>

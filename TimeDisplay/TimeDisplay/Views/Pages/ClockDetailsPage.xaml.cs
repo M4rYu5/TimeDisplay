@@ -32,19 +32,4 @@ namespace TimeDisplay.Views.Pages
             ThemeManager.CurrentTheme = ThemeManager.CurrentTheme == ColorPalettes.ColorScheme.Dark ? ColorPalettes.ColorScheme.Light : ColorPalettes.ColorScheme.Dark;
         }
     }
-
-    public class TimeToSignedHourMinutesConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return value is TimeSpan span
-                ? (span <= TimeSpan.FromMinutes(-1) ? "-" : "") + span.ToString(@"h\:mm", CultureInfo.InvariantCulture)
-                : null;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
 }

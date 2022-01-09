@@ -138,9 +138,28 @@
   <data name="Save_Changes" xml:space="preserve">
     <value>Save Chages</value>
   </data>
-
+  <data name="ClockDetailsPage_ErrorRequired" xml:space="preserve">
+    <value>Required field.</value>
+  </data>
+  <data name="ClockDetailsPage_ErrorNameLengthMax" xml:space="preserve">
+    <value>Name too long. Max 20 characters.</value>
+  </data>
+  <data name="ClockDetailsPage_ErrorUTCSeparatorNeeded" xml:space="preserve">
+    <value>The ":" separator is missing.</value>
+  </data>
+  <data name="ClockDetailsPage_InvalidTimeDifference" xml:space="preserve">
+    <value>The time difference should be written as "±hh:mm".</value>
+  </data>
   <data name="DisplayAll_MenuItemAddText" xml:space="preserve">
     <value>ADD</value>
   </data>
- 
+  <data name="ClockDetailsPage_InvalidTimeCharacterPostSing" xml:space="preserve">
+    <value>invalid character.</value>
+  </data>
+  <data name="ClockDetailsPage_InvalidTimeCharacterPostPlur" xml:space="preserve">
+    <value>invalid characters.</value>
+  </data>
+  <data name="ClockDetailsPage_UtcDifferenceFormat" xml:space="preserve">
+    <value>±hh:mm</value>
+  </data>
 </root>

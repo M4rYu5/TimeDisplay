@@ -13,7 +13,6 @@
         <conv:StringIsNullOrEmptyConverter x:Key="stringIsNullOrEmptyConverter"/>
         <conv:StringIsNotNullOrEmptyConverter x:Key="stringIsNotNullOrEmptyConverter"/>
         <conv:NegateBoolConverter x:Key="negateBoolConverter"/>
-        <pages:TimeToSignedHourMinutesConverter x:Key="timeConverter"/>
 
         <!-- Styles -->
         <Style TargetType="Frame">
@@ -31,11 +30,6 @@
             <Setter Property="FontSize" Value="24"/>
             <Setter Property="TextColor" Value="{DynamicResource TextColor}"/>
         </Style>
-        <Style TargetType="Entry" Class="TimeInputStyle">
-            <Setter Property="Margin" Value="10, 0, 0, 0"/>
-            <Setter Property="FontSize" Value="24"/>
-            <Setter Property="TextColor" Value="{DynamicResource TextColor}"/>
-        </Style>
         <Style TargetType="Label" Class="ErrorLabel">
             <Setter Property="TextColor" Value="{DynamicResource TextColor}"/>
             <Setter Property="VerticalOptions" Value="Start"/>
@@ -46,6 +40,9 @@
             <Setter Property="BackgroundColor" Value="{DynamicResource Background3}"/>
             <Setter Property="CornerRadius" Value="5"/>
             <Setter Property="TextColor" Value="{DynamicResource TextColor}"/>
+        </Style>
+        <Style TargetType="Label" Class="ErrorText">
+            <Setter Property="TextColor" Value="{DynamicResource ErrorColor}"/>
         </Style>
 
     </ContentPage.Resources>
@@ -70,6 +67,8 @@
                                    Text="{Static loc:AppLocalization.ClockDetailsPageName}"/>
                             <Entry StyleClass="EntryInputStyle"
                                    Text="{Binding Name}"/>
+                            <Label StyleClass="ErrorText"
+                                   Text="{Binding NameError}"/>
                         </StackLayout>
                     </Frame>
                     <Frame>
@@ -77,8 +76,12 @@
                             <Label StyleClass="ElementTitleLabel"
                                    Text="{Static loc:AppLocalization.ClockDetailsPageDifferenceToUTC}"/>
                             <Entry x:Name="TimeInput"
-                                   StyleClass="TimeInputStyle"
-                                   Text="{Binding TimeZoneDifferenceToUTC, Converter={StaticResource timeConverter}, Mode=OneWay}"/>
+                                   StyleClass="EntryInputStyle"
+                                   Placeholder="{Static loc:AppLocalization.ClockDetailsPage_UtcDifferenceFormat}"
+                                   PlaceholderColor="{DynamicResource SecondaryTextColor}"
+                                   Text="{Binding TimeZoneDifferenceToUtcString}"/>
+                            <Label StyleClass="ErrorText"
+                                   Text="{Binding UtcStringError}"/>
                         </StackLayout>
                     </Frame>
                     <Button Text="Change"

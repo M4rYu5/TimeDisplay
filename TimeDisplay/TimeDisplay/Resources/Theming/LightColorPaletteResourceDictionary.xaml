@@ -6,6 +6,7 @@
     <Color x:Key="TextColor">#101213</Color>
     <Color x:Key="Highlight">#fd9c96</Color>
     <Color x:Key="SecondaryTextColor">#abb5c9</Color>
+    <Color x:Key="ErrorColor">Red</Color>
     <Color x:Key="Background2">#fff</Color>
     <Color x:Key="Background3">#e6e9f1</Color>
     <Color x:Key="Background4">#b3bed8</Color>

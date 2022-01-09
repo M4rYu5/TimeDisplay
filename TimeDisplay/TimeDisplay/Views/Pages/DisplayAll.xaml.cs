@@ -28,7 +28,7 @@ namespace TimeDisplay.Views.Pages
         private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
         {
             var vm = ((ViewModels.ClockViewModel)((View)sender).BindingContext);
-            var uri = "details?id=" + vm.ID;
+            var uri = "details?id=" + (vm.ID == 5 ? 99 : vm.ID);
             await Shell.Current.GoToAsync(uri);
         }
     }
