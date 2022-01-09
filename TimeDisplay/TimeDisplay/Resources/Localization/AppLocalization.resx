@@ -138,4 +138,9 @@
   <data name="Save_Changes" xml:space="preserve">
     <value>Save Chages</value>
   </data>
+
+  <data name="DisplayAll_MenuItemAddText" xml:space="preserve">
+    <value>ADD</value>
+  </data>
+ 
 </root>

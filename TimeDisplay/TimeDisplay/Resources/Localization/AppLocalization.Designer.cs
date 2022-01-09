@@ -106,6 +106,15 @@ namespace TimeDisplay.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ADD.
+        /// </summary>
+        internal static string DisplayAll_MenuItemAddText {
+            get {
+                return ResourceManager.GetString("DisplayAll_MenuItemAddText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save Chages.
         /// </summary>
         internal static string Save_Changes {

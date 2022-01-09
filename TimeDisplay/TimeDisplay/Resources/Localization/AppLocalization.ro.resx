@@ -138,4 +138,8 @@
   <data name="Save_Changes" xml:space="preserve">
     <value>Salvează schimbările</value>
   </data>
+
+  <data name="DisplayAll_MenuItemAddText" xml:space="preserve">
+    <value>ADD</value>
+  </data>
 </root>

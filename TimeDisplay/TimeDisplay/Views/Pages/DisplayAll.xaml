@@ -1,17 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:viewmodels="clr-namespace:TimeDisplay.ViewModels"
-             xmlns:pages="clr-namespace:TimeDisplay.Views.Pages" 
+             xmlns:loc="clr-namespace:TimeDisplay.Resources.Localization" 
              xmlns:views="clr-namespace:TimeDisplay.Views.Views"
-             xmlns:vm="clr-namespace:TimeDisplay.ViewModels" xmlns:models="clr-namespace:TimeDisplay.Models"
              x:DataType="viewmodels:DisplayAllViewModel"
              x:Class="TimeDisplay.Views.Pages.DisplayAll"
              Title="Times"
              BackgroundColor="{DynamicResource Background}">
+
     <ContentPage.Resources>
         <viewmodels:DisplayAllViewModel x:Name="DisplayAllVM" x:Key="clockView"/>
         <views:DateTimeToTimeComponentConverter x:Key="timeConverter"/>
     </ContentPage.Resources>
+    
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{Static loc:AppLocalization.DisplayAll_MenuItemAddText}"
+                     BindingContext="{StaticResource clockView}"
+                     Command="{Binding AddNewDigitalClockCommand, Mode=OneWay}"/>
+    </ContentPage.ToolbarItems>
 
     <!-- CONTENT -->
     <ContentPage.Content>

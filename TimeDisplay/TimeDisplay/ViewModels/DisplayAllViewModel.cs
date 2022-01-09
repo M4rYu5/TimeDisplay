@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Windows.Input;
 using TimeDisplay.Data;
 using TimeDisplay.Models;
 using TimeDisplay.Services;
+using Xamarin.Forms;
 
 namespace TimeDisplay.ViewModels
 {
@@ -40,6 +42,9 @@ namespace TimeDisplay.ViewModels
             foreach (var item in Clocks)
                 clockUpdater.Add(item);
         }
+
+        private readonly ICommand addNewDigitalClock = new Command(async () => await Shell.Current.GoToAsync("details"));
+        public ICommand AddNewDigitalClockCommand { get => addNewDigitalClock; }
 
         private void ClocksCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
