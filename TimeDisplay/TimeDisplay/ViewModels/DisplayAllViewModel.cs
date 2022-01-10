@@ -16,9 +16,30 @@ namespace TimeDisplay.ViewModels
     {
         private const int UpdateInterval = 100; //ms
 
-        private readonly IClockRepository repository;
-        private ObservableCollection<ClockViewModel> clocks;
         private readonly ClockDateTimeUpdater clockUpdater;
+        private readonly IClockRepository repository;
+
+        private bool disposed;
+        private ObservableCollection<ClockViewModel> clocks;
+        private readonly ICommand addNewDigitalClock = new Command(async () => await Shell.Current.GoToAsync("details"));
+
+
+
+        public DisplayAllViewModel()
+        {
+            repository = (IClockRepository)Data.RepositoryFactory.GetRepository<int, ClockModel>();
+            // todo: make this to work async (see Refresh)
+            Clocks = new ObservableCollection<ClockViewModel>(repository.GetAll().GetAwaiter().GetResult().Select(s => ClockViewModel.FromModel(s)));
+
+            clockUpdater = new ClockDateTimeUpdater(UpdateInterval);
+            foreach (var item in Clocks)
+                clockUpdater.Add(item);
+        }
+
+
+        public ICommand AddNewDigitalClockCommand { get => addNewDigitalClock; }
+
+
 
         public ObservableCollection<ClockViewModel> Clocks
         {
@@ -32,19 +53,27 @@ namespace TimeDisplay.ViewModels
             }
         }
 
-        public DisplayAllViewModel()
-        {
-            repository = (IClockRepository)Data.RepositoryFactory.GetRepository<int, ClockModel>();
-            // todo: make this to work async (see Refresh)
-            Clocks = new ObservableCollection<ClockViewModel>(repository.GetAll().GetAwaiter().GetResult().Select(s => ClockViewModel.FromModel(s)));
 
-            clockUpdater = new ClockDateTimeUpdater(UpdateInterval);
-            foreach (var item in Clocks)
-                clockUpdater.Add(item);
-        }
 
-        private readonly ICommand addNewDigitalClock = new Command(async () => await Shell.Current.GoToAsync("details"));
-        public ICommand AddNewDigitalClockCommand { get => addNewDigitalClock; }
+        // todo: add a refresh function, something like this,
+        // also should check if the server state changed
+        //public void Refresh()
+        //{
+        //    Task.Run(async () =>
+        //    {
+        //        var list = await repository.GetAll();
+        //        var clockViewModels = list.Select(s => ClockViewModel.FromModel(s)).ToList();
+        //        Device.BeginInvokeOnMainThread(() =>
+        //        {
+        //            Clocks = new ReadOnlyCollection<ClockViewModel>(clockViewModels);
+        //            foreach (var item in Clocks)
+        //                clockUpdater.Add(item);
+        //        });
+        //    });
+        //}
+
+
+
 
         private void ClocksCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -65,24 +94,8 @@ namespace TimeDisplay.ViewModels
                 _ = repository.Add(item.ToModel()).GetAwaiter().GetResult();
         }
 
-        // todo: add a refresh function, something like this,
-        // also should check if the server state changed
-        //public void Refresh()
-        //{
-        //    Task.Run(async () =>
-        //    {
-        //        var list = await repository.GetAll();
-        //        var clockViewModels = list.Select(s => ClockViewModel.FromModel(s)).ToList();
-        //        Device.BeginInvokeOnMainThread(() =>
-        //        {
-        //            Clocks = new ReadOnlyCollection<ClockViewModel>(clockViewModels);
-        //            foreach (var item in Clocks)
-        //                clockUpdater.Add(item);
-        //        });
-        //    });
-        //}
 
-        private bool disposed;
+
         public void Dispose()
         {
             if (!disposed)
