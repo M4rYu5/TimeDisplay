@@ -51,16 +51,6 @@ namespace TimeDisplay.ViewModels
             InitValidation();
         }
 
-        private void ClockDetailsViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (IsClockModleProperty(e.PropertyName))
-            {
-                UpdateClockModelChanged();
-                Validator.ValidateAll();
-            }
-
-        }
-
 
         public bool IsBusy { get => isBusy; set => SetProperty(ref isBusy, value); }
         public string RepositoryIdNotFoundError { get => repositoryIdNotFoundError; set => SetProperty(ref repositoryIdNotFoundError, value); }
@@ -238,6 +228,15 @@ namespace TimeDisplay.ViewModels
             return propertyName == nameof(Name) || propertyName == nameof(TimeZoneDifferenceToUtcString) || propertyName == nameof(ID);
         }
 
+        private void ClockDetailsViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (IsClockModleProperty(e.PropertyName))
+            {
+                UpdateClockModelChanged();
+                Validator.ValidateAll();
+            }
+
+        }
 
 
 
