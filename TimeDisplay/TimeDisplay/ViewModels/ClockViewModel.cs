@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using TimeDisplay.Models;
+using TimeDisplay.Services;
 using Xamarin.Forms;
 
 namespace TimeDisplay.ViewModels

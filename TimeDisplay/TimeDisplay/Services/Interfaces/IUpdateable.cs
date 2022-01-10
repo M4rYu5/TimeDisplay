@@ -1,4 +1,4 @@
-﻿namespace TimeDisplay.ViewModels
+﻿namespace TimeDisplay.Services
 {
     public interface IUpdateable
     {
