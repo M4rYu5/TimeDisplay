@@ -66,7 +66,10 @@
                             <Label StyleClass="ElementTitleLabel"
                                    Text="{Static loc:AppLocalization.ClockDetailsPageName}"/>
                             <Entry StyleClass="EntryInputStyle"
-                                   Text="{Binding Name}"/>
+                                   Text="{Binding Name}"
+                                   ReturnType="Next"
+                                   ReturnCommandParameter="{Reference TimeInput}"
+                                   ReturnCommand="{Binding GoToEntry}"/>
                             <Label StyleClass="ErrorText"
                                    Text="{Binding NameError}"/>
                         </StackLayout>
@@ -79,7 +82,9 @@
                                    StyleClass="EntryInputStyle"
                                    Placeholder="{Static loc:AppLocalization.ClockDetailsPage_UtcDifferenceFormat}"
                                    PlaceholderColor="{DynamicResource SecondaryTextColor}"
-                                   Text="{Binding TimeZoneDifferenceToUtcString}"/>
+                                   Text="{Binding TimeZoneDifferenceToUtcString}"
+                                   ReturnType="Send"
+                                   ReturnCommand="{Binding SubmitChanges}"/>
                             <Label StyleClass="ErrorText"
                                    Text="{Binding UtcStringError}"/>
                         </StackLayout>
@@ -95,7 +100,9 @@
 
                         <Button Text="{Static loc:AppLocalization.Save_Changes}"
                                 VerticalOptions="End"
-                                IsVisible="{Binding ClockModelChanged}"/>
+                                IsVisible="{Binding ClockModelChanged}"
+                                Command="{Binding SubmitChanges}"
+                                IsEnabled="{Binding CanSubmitChanges}"/>
                     </Frame>
                 </StackLayout>
                 <!-- Error Display -->

@@ -1,4 +1,5 @@
-﻿using MvvmValidation;
+﻿using MvvmHelpers.Commands;
+using MvvmValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,8 @@ namespace TimeDisplay.ViewModels
     public class ClockDetailsViewModel : BaseViewModel, IQueryAttributable
     {
         private readonly ClockDetailVMModel currentClock = new ClockDetailVMModel();
+        private readonly ICommand goToEntry;
+        private readonly ICommand submitChanges;
         private readonly IClockRepository repository;
 
         private ClockDetailVMModel originalClockViewModel;
@@ -28,10 +31,22 @@ namespace TimeDisplay.ViewModels
         private string nameError;
         private string utcStringError;
         private bool modelChanged;
+        private bool canSubmitChanges;
+        private Func<Task> submitAction;
+        private bool actionRunning = false;
 
         public ClockDetailsViewModel(IClockRepository repository)
         {
             this.repository = repository;
+            goToEntry = new Xamarin.Forms.Command<object>((o) =>
+            {
+                if (o is not Entry entry)
+                    return;
+
+                entry.Focus();
+                entry.CursorPosition = entry.Text.Length;
+            });
+            submitChanges = new AsyncCommand(() => submitAction?.Invoke(), (obj) => CanSubmitChanges && submitAction != null && !actionRunning);
             PropertyChanged += ClockDetailsViewModel_PropertyChanged;
             InitValidation();
         }
@@ -52,6 +67,10 @@ namespace TimeDisplay.ViewModels
         public string NameError { get => nameError; set => SetProperty(ref nameError, value); }
         public string UtcStringError { get => utcStringError; set => SetProperty(ref utcStringError, value); }
         public bool ClockModelChanged { get => modelChanged; set => SetProperty(ref modelChanged, value); }
+        public bool CanSubmitChanges { get => canSubmitChanges; protected set => SetProperty(ref canSubmitChanges, value); }
+
+        public ICommand GoToEntry { get => goToEntry; }
+        public ICommand SubmitChanges { get => submitChanges; }
 
 
         public int ID
@@ -116,12 +135,9 @@ namespace TimeDisplay.ViewModels
 
         private void PullInfo(int id)
         {
-            int localID = id;
-            if (localID < 0)
+            if (id < 0)
             {
-                //originalClockViewModel = new ClockDetailVMModel();
-                ID = -1;
-                UpdateClockModelChanged();
+                InitInsertMode();
                 return;
             }
 
@@ -129,30 +145,69 @@ namespace TimeDisplay.ViewModels
             IsBusy = true;
             Task.Run(async () =>
             {
-                var item = await localClockRepository.Get(localID);
+                var item = await localClockRepository.Get(id);
                 if (item == null)
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        RepositoryIdNotFoundError = Resources.Localization.AppLocalization.ClockDetails_ClockIdNotFound;
-                        IsBusy = false;
-                        ID = localID;
-                    });
+                    Device.BeginInvokeOnMainThread(() => InitNotFoundMode(id));
                 else
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        var vm = ClockViewModel.FromModel(item);
-                        originalClockViewModel = ClockDetailVMModel.FromClockViewModel(vm);
-                        ID = vm.ID;
-                        Name = vm.Name;
-                        TimeZoneDifferenceToUtcString = originalClockViewModel.TimeZoneDifferenceToUtcString;
-                        IsBusy = false;
-                    });
-                }
+                    Device.BeginInvokeOnMainThread(() => InitEditMode(item));
             });
         }
 
 
+        private void InitInsertMode()
+        {
+            ID = -1;
+            UpdateClockModelChanged();
+            submitAction = async () =>
+            {
+                await InsertCurrentModelInRepository();
+                await Shell.Current.GoToAsync("../");
+            };
+        }
+        
+        private void InitEditMode(ClockModel item)
+        {
+            var vm = ClockViewModel.FromModel(item);
+            originalClockViewModel = ClockDetailVMModel.FromClockViewModel(vm);
+            ID = vm.ID;
+            Name = vm.Name;
+            TimeZoneDifferenceToUtcString = originalClockViewModel.TimeZoneDifferenceToUtcString;
+            IsBusy = false;
+            submitAction = async () =>
+            {
+                await UpdateCurrentModelInRepository();
+                await Shell.Current.GoToAsync("../");
+            };
+        }
+
+        private void InitNotFoundMode(int localID)
+        {
+            RepositoryIdNotFoundError = Resources.Localization.AppLocalization.ClockDetails_ClockIdNotFound;
+            IsBusy = false;
+            ID = localID;
+        }
+
+        private async Task InsertCurrentModelInRepository()
+        {
+            ClockModel model = currentClock;
+            if (model == null || !Validator.GetResult().IsValid)
+                return;
+
+            actionRunning = true;
+            await repository?.Add(model);
+            actionRunning = false;
+        }
+
+        private async Task UpdateCurrentModelInRepository()
+        {
+            ClockModel model = currentClock;
+            if (model == null || !Validator.GetResult().IsValid)
+                return;
+
+            actionRunning = true;
+            await repository?.Update(model.ID, model);
+            actionRunning = false;
+        }
 
         private void UpdateClockModelChanged()
         {
@@ -258,6 +313,8 @@ namespace TimeDisplay.ViewModels
                     NameError = args.NewResult.ErrorList.FirstOrDefault()?.ErrorText;
                 if ((string)args.Target == nameof(TimeZoneDifferenceToUtcString))
                     UtcStringError = args.NewResult.ErrorList.FirstOrDefault()?.ErrorText;
+
+                CanSubmitChanges = Validator.GetResult().IsValid;
             };
         }
         #endregion
