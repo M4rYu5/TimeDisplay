@@ -10,7 +10,7 @@ namespace TimeDisplay.Data
 {
     class DebugTimesRepository : IClockRepository
     {
-        private readonly Dictionary<int, ClockModel> debugList = new Dictionary<int, ClockModel>
+        private static readonly Dictionary<int, ClockModel> debugList = new Dictionary<int, ClockModel>
         {
             {1, new ClockModel(){ID = 1, Name = "UTC", TimeZoneDifferenceToUTC = TimeSpan.Zero}},
             {2, new ClockModel(){ID = 2, Name = "UTC+1", TimeZoneDifferenceToUTC = TimeSpan.FromHours(1)}},
