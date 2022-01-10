@@ -154,7 +154,7 @@ namespace TimeDisplay.ViewModels
                 await Shell.Current.GoToAsync("../");
             };
         }
-        
+
         private void InitEditMode(ClockModel item)
         {
             var vm = ClockViewModel.FromModel(item);
@@ -179,24 +179,20 @@ namespace TimeDisplay.ViewModels
 
         private async Task InsertCurrentModelInRepository()
         {
-            ClockModel model = currentClock;
+            ClockModel model = currentClock.ToClockModel();
             if (model == null || !Validator.GetResult().IsValid)
                 return;
 
-            actionRunning = true;
             await repository?.Add(model);
-            actionRunning = false;
         }
 
         private async Task UpdateCurrentModelInRepository()
         {
-            ClockModel model = currentClock;
+            ClockModel model = currentClock.ToClockModel();
             if (model == null || !Validator.GetResult().IsValid)
                 return;
 
-            actionRunning = true;
             await repository?.Update(model.ID, model);
-            actionRunning = false;
         }
 
         private void UpdateClockModelChanged()
@@ -321,12 +317,16 @@ namespace TimeDisplay.ViewModels
 
 
 
-        private class ClockDetailVMModel : ClockModel
+        private class ClockDetailVMModel
         {
+            public int ID { get; set; } = -1;
+            public string Name { get; set; }
             public string TimeZoneDifferenceToUtcString { get; set; }
 
-            public new TimeSpan TimeZoneDifferenceToUTC { get => StringToTimeSpanConverter(TimeZoneDifferenceToUtcString) ?? TimeSpan.Zero; }
-
+            public ClockModel ToClockModel()
+            {
+                return ToClockModel(this);
+            }
 
             public static TimeSpan? StringToTimeSpanConverter(string time)
             {
@@ -374,11 +374,11 @@ namespace TimeDisplay.ViewModels
             }
             public static ClockModel ToClockModel(ClockDetailVMModel vm)
             {
-                return new ClockDetailVMModel()
+                return new ClockModel()
                 {
                     ID = vm.ID,
                     Name = vm.Name,
-                    TimeZoneDifferenceToUtcString = TimeSpanToStringConverter(vm.TimeZoneDifferenceToUTC),
+                    TimeZoneDifferenceToUTC = StringToTimeSpanConverter(vm.TimeZoneDifferenceToUtcString) ?? TimeSpan.Zero,
                 };
             }
         }
