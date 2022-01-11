@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Input;
 using TimeDisplay.Data;
+using TimeDisplay.Data.Interfaces;
 using TimeDisplay.Models;
 using TimeDisplay.Resources.Localization;
 using Xamarin.Forms;

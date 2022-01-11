@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TimeDisplay.Models;
 
-namespace TimeDisplay.Data
+namespace TimeDisplay.Data.Interfaces
 {
     public interface IRepository<Key, T>
     {

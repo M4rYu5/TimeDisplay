@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TimeDisplay.Models;
 
-namespace TimeDisplay.Data
+namespace TimeDisplay.Data.Interfaces
 {
     public interface IClockRepository : IRepository<int, ClockModel>
     {
