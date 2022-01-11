@@ -151,8 +151,10 @@ namespace TimeDisplay.ViewModels
             UpdateClockModelChanged();
             submitAction = async () =>
             {
+                actionRunning = true;
                 await InsertCurrentModelInRepository();
                 await Shell.Current.GoToAsync("../");
+                actionRunning = false;
             };
         }
 
@@ -166,8 +168,10 @@ namespace TimeDisplay.ViewModels
             IsBusy = false;
             submitAction = async () =>
             {
+                actionRunning = true;
                 await UpdateCurrentModelInRepository();
                 await Shell.Current.GoToAsync("../");
+                actionRunning = false;
             };
         }
 
