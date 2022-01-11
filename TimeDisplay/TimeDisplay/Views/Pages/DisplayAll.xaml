@@ -22,26 +22,31 @@
 
     <!-- CONTENT -->
     <ContentPage.Content>
-        <CollectionView x:Name="TimesColection" 
-                        BindingContext="{StaticResource clockView}"
-                        ItemsSource="{Binding Clocks}"
-                        SelectionMode="Single"
-                        Margin="20">
-            <CollectionView.ItemsLayout>
-                <GridItemsLayout Span="2" 
-                                 Orientation="Vertical"
-                                 VerticalItemSpacing="5"
-                                 HorizontalItemSpacing="5"/>
-            </CollectionView.ItemsLayout>
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <views:DigitalClock>
-                        <views:DigitalClock.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
-                        </views:DigitalClock.GestureRecognizers>
-                    </views:DigitalClock>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+        <RefreshView BindingContext="{StaticResource clockView}"
+                     RefreshColor="{DynamicResource Highlight}"
+                     Command="{Binding RefreshCommand}"
+                     IsRefreshing="{Binding IsRefreshing}">
+            <CollectionView x:Name="TimesColection" 
+                            BindingContext="{StaticResource clockView}"
+                            ItemsSource="{Binding Clocks}"
+                            SelectionMode="Single"
+                            Margin="20">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Span="2" 
+                                     Orientation="Vertical"
+                                     VerticalItemSpacing="5"
+                                     HorizontalItemSpacing="5"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <views:DigitalClock>
+                            <views:DigitalClock.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                            </views:DigitalClock.GestureRecognizers>
+                        </views:DigitalClock>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
     </ContentPage.Content>
 </ContentPage>

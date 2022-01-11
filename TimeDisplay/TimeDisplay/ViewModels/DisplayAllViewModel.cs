@@ -1,9 +1,11 @@
-﻿using System;
+﻿using MvvmHelpers.Commands;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using TimeDisplay.Data;
 using TimeDisplay.Data.Interfaces;
@@ -19,24 +21,31 @@ namespace TimeDisplay.ViewModels
 
         private readonly ClockDateTimeUpdater clockUpdater;
         private readonly IClockRepository repository;
+        private readonly ICommand addNewDigitalClock;
+        private readonly ICommand refreshCommand;
 
         private bool disposed;
+        private bool isRefreshing;
         private ObservableCollection<ClockViewModel> clocks;
-        private readonly ICommand addNewDigitalClock = new Command(async () => await Shell.Current.GoToAsync("details"));
+
 
 
 
         public DisplayAllViewModel()
         {
             repository = (IClockRepository)Data.RepositoryFactory.GetRepository<int, ClockModel>();
-            
+
+            addNewDigitalClock = new AsyncCommand(() => Shell.Current.GoToAsync("details"));
+            refreshCommand = new AsyncCommand(() => RefreshClocks(), (o) => !IsRefreshing, continueOnCapturedContext: true);
+
             clockUpdater = new ClockDateTimeUpdater(UpdateInterval);
-            RefreshClocks();
         }
 
+
+
         public ICommand AddNewDigitalClockCommand { get => addNewDigitalClock; }
-
-
+        public ICommand RefreshCommand { get => refreshCommand; }
+        public bool IsRefreshing { get => isRefreshing; set => SetProperty(ref isRefreshing, value); }
 
         public ObservableCollection<ClockViewModel> Clocks
         {
@@ -52,25 +61,6 @@ namespace TimeDisplay.ViewModels
 
 
 
-        // todo: add a refresh function, something like this,
-        // also should check if the server state changed
-        //public void Refresh()
-        //{
-        //    Task.Run(async () =>
-        //    {
-        //        var list = await repository.GetAll();
-        //        var clockViewModels = list.Select(s => ClockViewModel.FromModel(s)).ToList();
-        //        Device.BeginInvokeOnMainThread(() =>
-        //        {
-        //            Clocks = new ReadOnlyCollection<ClockViewModel>(clockViewModels);
-        //            foreach (var item in Clocks)
-        //                clockUpdater.Add(item);
-        //        });
-        //    });
-        //}
-
-
-
         public void Dispose()
         {
             if (!disposed)
@@ -80,8 +70,6 @@ namespace TimeDisplay.ViewModels
             }
             GC.SuppressFinalize(this);
         }
-
-
 
 
 
@@ -105,14 +93,18 @@ namespace TimeDisplay.ViewModels
                 _ = repository.Add(item.ToModel()).GetAwaiter().GetResult();
         }
 
-        private void RefreshClocks()
+        private async Task RefreshClocks()
         {
+
             // todo: make this to work async (see Refresh)
-            Clocks = new ObservableCollection<ClockViewModel>(repository.GetAll().GetAwaiter().GetResult().Select(s => ClockViewModel.FromModel(s)));
+            var elements = await repository.GetAll().ConfigureAwait(true);
+            Clocks = new ObservableCollection<ClockViewModel>(elements.Select(s => ClockViewModel.FromModel(s)));
 
             clockUpdater.Clear();
             foreach (var item in Clocks)
                 clockUpdater.Add(item);
+
+            IsRefreshing = false;
         }
 
     }

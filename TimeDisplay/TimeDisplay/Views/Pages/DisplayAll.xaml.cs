@@ -18,6 +18,12 @@ namespace TimeDisplay.Views.Pages
             InitializeComponent();
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            DisplayAllVM.RefreshCommand.Execute(this);
+        }
+
         protected override void OnParentSet()
         {
             base.OnParentSet();
