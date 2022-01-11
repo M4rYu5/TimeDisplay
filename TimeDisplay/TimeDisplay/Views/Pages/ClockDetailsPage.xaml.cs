@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TimeDisplay.Data;
+using TimeDisplay.Data.Interfaces;
 using TimeDisplay.Resources.Theming;
 using TimeDisplay.ViewModels;
 using Xamarin.Forms;
